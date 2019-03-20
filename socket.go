@@ -22,7 +22,6 @@ type Socket interface {
 	// On registers the function f to handle an event.
 	On(event string, f interface{}) error
 
-
 	// Emit emits an event with given args.
 	Emit(event string, args ...interface{}) error
 
