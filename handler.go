@@ -23,15 +23,22 @@ func newBaseHandler(name string, broadcast BroadcastAdaptor) *baseHandler {
 }
 
 // On registers the function f to handle an event.
-func (h *baseHandler) On(event string, f interface{}) error {
+func (h *baseHandler) On(event string, f interface{}) {
 	c, err := newCaller(f)
 	if err != nil {
-		return err
+		panic("回调函数错误")
 	}
 	h.evMu.Lock()
 	h.events[event] = c
 	h.evMu.Unlock()
-	return nil
+}
+
+// 连接
+func (h *baseHandler) OnConnection(f func(Socket,string)){
+	c, _ := newCaller(f)
+	h.evMu.Lock()
+	h.events["connection"] = c
+	h.evMu.Unlock()
 }
 
 type socketHandler struct {
